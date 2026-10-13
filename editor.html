@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Editor Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Tinos:ital,wght@0,400;0,700;1,400&family=Arimo:wght@400;700&family=Cousine:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-mode="edit">
+<div class="wrap">
+  <header>
+    <h1>Editor Template</h1>
+    <p>Atur posisi kolom sekali saja. Setelah pas, ekspor <code>template.js</code>, timpa file dengan nama sama di folder website, lalu deploy. Halaman isi formulir akan memakai layout ini.</p>
+  </header>
+
+  <div class="toolbar">
+    <label class="btn" for="upload">Ganti background</label>
+    <input id="upload" type="file" accept="image/png,image/jpeg,image/webp,application/pdf" hidden>
+    <button class="btn" id="addMode">+ Tambah kolom</button>
+    <span class="sep"></span>
+    <span class="note" id="dirty" hidden>Ada perubahan yang belum diekspor</span>
+    <a class="btn" href="index.html?draft" target="_blank" rel="noopener">Lihat di halaman isi</a>
+    <label class="btn" for="importJson">Buka template</label>
+    <input id="importJson" type="file" accept=".js,.json,application/json,text/javascript" hidden>
+    <button class="btn" id="download">Tes PDF</button>
+    <button class="btn primary" id="exportJson">Ekspor template.js</button>
+  </div>
+  <p class="status" id="status" aria-live="polite"></p>
+  <p class="note" id="stamp" style="font-size:12px"></p>
+
+  <div class="grid">
+    <div class="col">
+      <section class="panel" id="selPanel" hidden>
+        <h2>Kolom terpilih</h2>
+        <div class="two">
+          <div class="field"><label for="sLabel">Label di form</label><input id="sLabel" type="text"></div>
+          <div class="field"><label for="sKey">Kunci</label><input id="sKey" type="text" spellcheck="false"></div>
+        </div>
+        <div class="two">
+          <div class="field"><label for="sType">Jenis</label>
+            <select id="sType"><option value="text">Teks</option><option value="date">Tanggal</option><option value="number">Angka</option><option value="long">Teks panjang (beberapa baris)</option></select></div>
+          <div class="field"><label for="sAlign">Posisi teks</label>
+            <select id="sAlign"><option value="left">Mulai dari titik</option><option value="center">Di tengah titik</option></select></div>
+        </div>
+        <div class="two">
+          <div class="field"><label for="sSize">Ukuran huruf (pt)</label><input id="sSize" type="number" min="6" max="28" step="0.5"></div>
+          <div class="field"><label for="sW">Lebar maks (mm)</label><input id="sW" type="number" min="5" max="400" step="1" placeholder="Otomatis"></div>
+        </div>
+        <div class="field" id="sGapWrap"><label for="sGap">Jarak antarbaris (mm)</label><input id="sGap" type="number" min="2" max="40" step="0.5"></div>
+        <div class="row">
+          <span class="note">Geser 0,5 mm:</span>
+          <button class="btn small" data-n="0,-0.5" aria-label="Geser ke atas">↑</button>
+          <button class="btn small" data-n="0,0.5" aria-label="Geser ke bawah">↓</button>
+          <button class="btn small" data-n="-0.5,0" aria-label="Geser ke kiri">←</button>
+          <button class="btn small" data-n="0.5,0" aria-label="Geser ke kanan">→</button>
+        </div>
+        <div class="row">
+          <button class="btn small" id="sDup">Duplikat</button>
+          <button class="btn small danger" id="sDel">Hapus kolom</button>
+        </div>
+        <p class="note">Seret kolom di kertas untuk memindahkan. Keyboard: panah geser 0,5 mm (Shift = 2 mm), <kbd>Delete</kbd> hapus. Dua kolom dengan kunci yang sama memakai satu isian.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Data uji</h2>
+        <div class="form" id="form"></div>
+        <p class="note" id="noFields" hidden>Belum ada kolom. Tekan "+ Tambah kolom" lalu ketuk tempat isian di kertas.</p>
+        <div class="row"><button class="btn small" id="clearData">Kosongkan data uji</button></div>
+      </section>
+
+      <section class="panel">
+        <h2>Pengaturan template</h2>
+        <div class="form">
+          <div class="field"><label for="set_title">Judul halaman</label><input id="set_title" type="text"></div>
+          <div class="two">
+            <div class="field"><label for="set_font">Huruf</label>
+              <select id="set_font"><option value="times">Times New Roman</option><option value="helvetica">Arial / Helvetica</option><option value="courier">Courier</option></select></div>
+            <div class="field"><label for="set_ink">Warna tinta</label>
+              <select id="set_ink"><option value="#111111">Hitam</option><option value="#14249a">Biru tinta</option></select></div>
+          </div>
+          <div class="field"><label for="set_fname">Nama file PDF (boleh pakai {{kunci}})</label><input id="set_fname" type="text"></div>
+          <label class="check"><input type="checkbox" id="set_withBg"> Sertakan background di PDF</label>
+          <p class="note">Matikan kalau PDF-nya mau dicetak langsung ke kertas formulir yang sudah tercetak.</p>
+          <div class="row"><button class="btn small" id="resetDraft">Buang perubahan, muat template online</button></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col paper-col">
+      <section class="panel">
+        <div class="paper-head">
+          <span class="hint" id="paperHint">Ketuk kolom untuk memilih, seret untuk memindahkan.</span>
+          <select id="zoom" aria-label="Perbesar">
+            <option value="1">Pas lebar</option><option value="1.5">150%</option><option value="2">200%</option><option value="3">300%</option>
+          </select>
+        </div>
+        <div class="desk" id="desk"><p class="note" style="padding:40px 0">Memuat template…</p></div>
+      </section>
+    </div>
+  </div>
+</div>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/pdf.min.js"></script>
+<script src="vendor/pdf.worker.min.js"></script>
+<script src="template.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Isi Formulir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Tinos:ital,wght@0,400;0,700;1,400&family=Arimo:wght@400;700&family=Cousine:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-mode="fill">
+<div class="wrap">
+  <header>
+    <h1 id="docTitle">Isi Formulir</h1>
+    <p>Isi data di form. Tulisan langsung muncul di tempatnya pada dokumen, lalu unduh hasilnya sebagai PDF.</p>
+  </header>
+
+  <div class="grid">
+    <div class="col">
+      <section class="panel">
+        <h2>Isi data</h2>
+        <div class="form" id="form"></div>
+        <div class="row">
+          <button class="btn primary" id="download">Unduh PDF</button>
+          <button class="btn" id="clearData">Kosongkan isian</button>
+        </div>
+        <p class="status" id="status" aria-live="polite"></p>
+        <p class="note">Data hanya tersimpan di browser kamu dan tidak dikirim ke mana pun.</p>
+        <p class="note" id="stamp" style="font-size:12px"></p>
+      </section>
+    </div>
+
+    <div class="col paper-col">
+      <section class="panel">
+        <div class="paper-head">
+          <span class="hint">Pratinjau</span>
+          <select id="zoom" aria-label="Perbesar">
+            <option value="1">Pas lebar</option><option value="1.5">150%</option><option value="2">200%</option>
+          </select>
+        </div>
+        <div class="desk" id="desk"><p class="note" style="padding:40px 0">Memuat dokumen…</p></div>
+      </section>
+    </div>
+  </div>
+</div>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="template.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
